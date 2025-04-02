@@ -44,8 +44,13 @@ const sendTelegramNotification = async (message) => {
     }
 };
 
+// Fungsi untuk membuat delay berdasarkan input pengguna
+const delay = (seconds) => {
+    return new Promise(resolve => setTimeout(resolve, seconds * 1000)); // Mengubah detik ke milidetik
+};
+
 // Fungsi untuk mengirim TEA ke daftar alamat
-const sendTea = async (addresses) => {
+const sendTea = async (addresses, delayTime) => {
     for (let address of addresses) {
         try {
             const tx = await wallet.sendTransaction({
@@ -55,8 +60,18 @@ const sendTea = async (addresses) => {
             console.log(`Mengirim 0.001 TEA ke ${address}. Tx Hash: ${tx.hash}`);
             await tx.wait();
 
-            // Mengirim notifikasi ke Telegram setelah transaksi berhasil
-            await sendTelegramNotification(`Transaksi sukses: Kirim 0.001 TEA ke ${address} - Tx Hash: ${tx.hash}`);
+            // Menunggu sesuai delay yang ditentukan oleh pengguna
+            await delay(delayTime);
+
+            // Membuat URL untuk Tx Hash
+            const txUrl = `https://sepolia.tea.xyz/tx/${tx.hash}`;
+
+            // Mengirim notifikasi ke Telegram dengan link Tx Hash
+            await sendTelegramNotification(`Transaksi sukses: Kirim 0.001 TEA ke ${address} - Tx Hash: [${tx.hash}](${txUrl})`);
+
+            // Menunggu sesuai delay yang ditentukan oleh pengguna setelah notifikasi
+            await delay(delayTime);
+
         } catch (error) {
             console.error(`Gagal mengirim ke ${address}:`, error);
             // Mengirim notifikasi jika gagal mengirim transaksi
@@ -79,11 +94,33 @@ const readAddressesFromFile = () => {
     });
 };
 
+// Fungsi untuk meminta input dari pengguna
+const askDelayTime = () => {
+    return new Promise((resolve, reject) => {
+        const rl = readline.createInterface({
+            input: process.stdin,
+            output: process.stdout
+        });
+
+        rl.question('Masukkan waktu delay (dalam detik, antara 1 dan 1000): ', (answer) => {
+            const delayTime = parseInt(answer);
+            if (delayTime >= 1 && delayTime <= 1000) {
+                resolve(delayTime);
+                rl.close();
+            } else {
+                reject('Input tidak valid. Masukkan angka antara 1 dan 1000.');
+                rl.close();
+            }
+        });
+    });
+};
+
 (async () => {
     try {
+        const delayTime = await askDelayTime();
         const addresses = await readAddressesFromFile();
         console.log("Alamat yang diambil dari address.json:", addresses);
-        await sendTea(addresses);
+        await sendTea(addresses, delayTime);
     } catch (error) {
         console.error("Gagal memproses alamat:", error);
     }
