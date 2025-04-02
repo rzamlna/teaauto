@@ -25,7 +25,7 @@ Buat file `.env` di root direktori proyek dan masukkan konfigurasi berikut:
 PRIVATE_KEY=your_private_key_here
 TELEGRAM_API_KEY=your_telegram_api_key_here
 TELEGRAM_CHAT_ID=your_telegram_chat_id_here
-
+```
 - Jalankan skrip dengan perintah berikut:
 ```bash
 node index.js
