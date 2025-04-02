@@ -65,6 +65,9 @@ const sendTea = async (addresses, delayTime, tokenContract, tokenAmount, tokenSy
 
                 const txUrl = `https://sepolia.tea.xyz/tx/${tx.hash}`;
                 await sendTelegramNotification(`Transaksi sukses: Kirim ${tokenAmount} ${tokenSymbol} ke ${address} - Tx Hash: [${tx.hash}](${txUrl})`);
+
+                // Log transaksi sukses di konsol
+                console.log(`Transaksi sukses: Kirim ${tokenAmount} ${tokenSymbol} ke ${address} - Tx Hash: ${tx.hash}`);
             } else {
                 // Kirim token sesuai kontrak, jumlah, dan simbol yang diberikan
                 const token = new ethers.Contract(tokenContract, [
@@ -76,6 +79,9 @@ const sendTea = async (addresses, delayTime, tokenContract, tokenAmount, tokenSy
 
                 const txUrl = `https://sepolia.tea.xyz/tx/${tx.hash}`;
                 await sendTelegramNotification(`Transaksi sukses: Kirim ${tokenAmount} ${tokenSymbol} ke ${address} - Tx Hash: [${tx.hash}](${txUrl})`);
+
+                // Log transaksi sukses di konsol
+                console.log(`Transaksi sukses: Kirim ${tokenAmount} ${tokenSymbol} ke ${address} - Tx Hash: ${tx.hash}`);
             }
 
             await tx.wait();
@@ -83,12 +89,10 @@ const sendTea = async (addresses, delayTime, tokenContract, tokenAmount, tokenSy
             // Menunggu sesuai delay yang ditentukan oleh pengguna
             await delay(delayTime);
 
-            // Menunggu sesuai delay yang ditentukan oleh pengguna setelah notifikasi
-            await delay(delayTime);
-
         } catch (error) {
             // Gagal mengirim ke alamat, tidak ada log ke konsol
             await sendTelegramNotification(`Gagal mengirim ke ${address}: ${error.message}`);
+            console.error(`Gagal mengirim ke ${address}: ${error.message}`);  // Log kesalahan di konsol
         }
     }
 };
