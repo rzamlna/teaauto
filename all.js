@@ -13,11 +13,6 @@ const asciiArt = `
 ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░         ░▒▓█▓▒░   ░▒▓█▓▒░        ░▒▓█▓▒░         ░▒▓█▓▒░   ░▒▓█▓▒░░▒▓█▓▒░ 
 ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░         ░▒▓█▓▒░   ░▒▓█▓▒░  ▒▓██▓▒░▒▓█▓▒░         ░▒▓█▓▒░   ░▒▓█▓▒░░▒▓█▓▒░ 
  ░▒▓██████▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓████████▓▒░  ░▒▓█▓▒░   ░▒▓█▓▒░  ▒▓██▓▒░▒▓████████▓▒░  ░▒▓█▓▒░   ░▒▓█▓▒░░▒▓█▓▒░ 
-Owner = janetf.eth
-Telegram = @ChrisEl2
-X = @janee0x
-
-                                                    - HAK CIPTA -
 `;
 
 console.log(asciiArt);  // Menampilkan ASCII Art
@@ -114,6 +109,27 @@ const readAddressesFromFile = () => {
 };
 
 // Fungsi untuk meminta input dari pengguna
+const askDelayTime = () => {
+    return new Promise((resolve, reject) => {
+        const rl = readline.createInterface({
+            input: process.stdin,
+            output: process.stdout
+        });
+
+        rl.question('Masukkan waktu delay (dalam detik, antara 1 dan 1000): ', (answer) => {
+            const delayTime = parseInt(answer);
+            if (delayTime >= 1 && delayTime <= 1000) {
+                resolve(delayTime);
+                rl.close();
+            } else {
+                reject('Input tidak valid. Masukkan angka antara 1 dan 1000.');
+                rl.close();
+            }
+        });
+    });
+};
+
+// Fungsi untuk meminta input dari pengguna tentang jenis transaksi
 const askUserInput = () => {
     return new Promise((resolve, reject) => {
         const rl = readline.createInterface({
