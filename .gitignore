@@ -1,0 +1,13 @@
+# Node.js
+node_modules/
+
+# .env file yang berisi informasi sensitif
+.env
+
+# Logs
+*.log
+
+# Direktori yang dihasilkan oleh npm
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
