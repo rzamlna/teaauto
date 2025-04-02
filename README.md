@@ -16,6 +16,7 @@ Ikuti langkah-langkah berikut untuk menginstal dan menjalankan skrip:
 Clone repositori ini ke komputer lokal Anda:
 
 git clone https://github.com/rzamlna/teaauto.git
+
 cd teaauto
 
 npm install
