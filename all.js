@@ -34,13 +34,15 @@ const wallet = new ethers.Wallet(PRIVATE_KEY, provider);
 // Fungsi untuk mengirim pesan ke bot Telegram
 const sendTelegramNotification = async (message) => {
     try {
-        const response = await axios.post(`https://api.telegram.org/bot${TELEGRAM_API_KEY}/sendMessage`, {
+        // Kirim notifikasi ke Telegram
+        await axios.post(`https://api.telegram.org/bot${TELEGRAM_API_KEY}/sendMessage`, {
             chat_id: TELEGRAM_CHAT_ID,
             text: message
+        }, {
+            timeout: 3000  // Timeout 3 detik
         });
-        console.log("Notifikasi dikirim ke Telegram:", response.data);
     } catch (error) {
-        console.error("Gagal mengirim notifikasi ke Telegram:", error);
+        // Gagal mengirim notifikasi, tetapi tidak ada log di konsol
     }
 };
 
@@ -60,7 +62,9 @@ const sendTea = async (addresses, delayTime, tokenContract, tokenAmount, tokenSy
                     to: address,
                     value: ethers.parseEther("0.001"), // Kirim 0.001 TEA ke setiap alamat
                 });
-                console.log(`Mengirim 0.001 TEA ke ${address}. Tx Hash: ${tx.hash}`);
+
+                const txUrl = `https://sepolia.tea.xyz/tx/${tx.hash}`;
+                await sendTelegramNotification(`Transaksi sukses: Kirim ${tokenAmount} ${tokenSymbol} ke ${address} - Tx Hash: [${tx.hash}](${txUrl})`);
             } else {
                 // Kirim token sesuai kontrak, jumlah, dan simbol yang diberikan
                 const token = new ethers.Contract(tokenContract, [
@@ -69,7 +73,9 @@ const sendTea = async (addresses, delayTime, tokenContract, tokenAmount, tokenSy
                 
                 const amount = ethers.parseUnits(tokenAmount, 18); // Asumsi token memiliki 18 desimal
                 tx = await token.transfer(address, amount);
-                console.log(`Mengirim ${tokenAmount} ${tokenSymbol} ke ${address}. Tx Hash: ${tx.hash}`);
+
+                const txUrl = `https://sepolia.tea.xyz/tx/${tx.hash}`;
+                await sendTelegramNotification(`Transaksi sukses: Kirim ${tokenAmount} ${tokenSymbol} ke ${address} - Tx Hash: [${tx.hash}](${txUrl})`);
             }
 
             await tx.wait();
@@ -77,18 +83,11 @@ const sendTea = async (addresses, delayTime, tokenContract, tokenAmount, tokenSy
             // Menunggu sesuai delay yang ditentukan oleh pengguna
             await delay(delayTime);
 
-            // Membuat URL untuk Tx Hash
-            const txUrl = `https://sepolia.tea.xyz/tx/${tx.hash}`;
-
-            // Mengirim notifikasi ke Telegram dengan link Tx Hash
-            await sendTelegramNotification(`Transaksi sukses: Kirim ${tokenAmount} ${tokenSymbol} ke ${address} - Tx Hash: [${tx.hash}](${txUrl})`);
-
             // Menunggu sesuai delay yang ditentukan oleh pengguna setelah notifikasi
             await delay(delayTime);
 
         } catch (error) {
-            console.error(`Gagal mengirim ke ${address}:`, error);
-            // Mengirim notifikasi jika gagal mengirim transaksi
+            // Gagal mengirim ke alamat, tidak ada log ke konsol
             await sendTelegramNotification(`Gagal mengirim ke ${address}: ${error.message}`);
         }
     }
