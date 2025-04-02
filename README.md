@@ -1,25 +1,22 @@
 TEA Tesnet sepolia Script bot
 Proyek ini adalah skrip untuk mengirimkan 0.001 TEA ke beberapa alamat Ethereum. Anda dapat memilih untuk menghasilkan alamat secara acak atau menggunakan daftar alamat yang Anda miliki sendiri.
 
-Fitur
-Menghasilkan alamat Ethereum secara acak.
-Mengirimkan 0.001 TEA ke setiap alamat.
-Memungkinkan pengguna untuk memasukkan daftar alamat secara manual.
-Dapat mengirimkan token ERC-20 ke alamat-alamat yang terdaftar, menggunakan private key dari file .env.
-Persyaratan
-Node.js (pastikan versi terbaru sudah terpasang).
-Private key Anda sendiri yang disimpan di file .env.
-Instalasi
-Ikuti langkah-langkah berikut untuk menginstal dan menjalankan skrip:
-
+FITUR =
+- Auto send 0.001 TEA ATAU BISA MEMILIH
+- Notifikasi ke bot telegram
+- Sudah menyiapkan 100+ address untuk dikirim (address.json)
+  `DO YOU OWN RISK`
+  
 1. Clone Repositori
 Clone repositori ini ke komputer lokal Anda:
-
+```bash
 git clone https://github.com/rzamlna/teaauto.git
-
 cd teaauto
-
+```
 npm install
+
+npm install ethers axios dotenv
+
 
 - Buat file .env di root folder proyek dan masukkan private key Anda:
 
