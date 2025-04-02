@@ -1,11 +1,11 @@
 TEA Tesnet sepolia Script bot
 Proyek ini adalah skrip untuk mengirimkan 0.001 TEA ke beberapa alamat Ethereum. Anda dapat memilih untuk menghasilkan alamat secara acak atau menggunakan daftar alamat yang Anda miliki sendiri.
 
-FITUR =
-- Auto send 0.001 TEA ATAU BISA MEMILIH
-- Notifikasi ke bot telegram
-- Sudah menyiapkan 100+ address untuk dikirim (address.json)
-  `DO YOU OWN RISK`
+**FITUR =**
+- ## **Auto send 0.001 TEA ATAU BISA MEMILIH**
+- **Notifikasi ke bot telegram**
+- **Sudah menyiapkan 100+ address untuk dikirim (address.json)**
+  **`DO YOU OWN RISK`**
   
 1. Clone Repositori
 Clone repositori ini ke komputer lokal Anda:
@@ -20,7 +20,7 @@ npm install
 npm install ethers axios dotenv
 ```
 
-Buat file `.env` di root direktori proyek dan masukkan konfigurasi berikut:
+**Buat file `.env` di root direktori proyek dan masukkan konfigurasi berikut:**
 ```plaintext
 PRIVATE_KEY=your_private_key_here
 TELEGRAM_API_KEY=your_telegram_api_key_here
@@ -36,5 +36,6 @@ DONATION
 `ETH = janetf.eth`
 
 `SOL = janechris.sol`
-
-`DO YOU OWNER RISK`
+```
+ꜱᴇʙᴇʟᴜᴍ ᴍᴇᴍᴀᴋᴀɪ ꜱᴄʀɪᴘᴛ ɪɴɪ, ᴘᴀʜᴀᴍɪ ᴀʀᴛɪ 
+ᴅᴏ ʏᴏᴜ ᴏᴡɴ ʀɪꜱᴋ!!!
