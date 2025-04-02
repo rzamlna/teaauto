@@ -45,9 +45,9 @@ const sendTea = async (addresses) => {
         try {
             const tx = await wallet.sendTransaction({
                 to: address,
-                value: ethers.parseEther("0.01"), // Kirim 0.01 TEA ke setiap alamat
+                value: ethers.parseEther("0.001"), // Kirim 0.001 TEA ke setiap alamat
             });
-            console.log(`Mengirim 0.01 TEA ke ${address}. Tx Hash: ${tx.hash}`);
+            console.log(`Mengirim 0.001 TEA ke ${address}. Tx Hash: ${tx.hash} - janetf.eth`);
             await tx.wait();
         } catch (error) {
             console.error(`Gagal mengirim ke ${address}:`, error);
