@@ -1,14 +1,14 @@
-TEA Tesnet sepolia Script bot
-Proyek ini adalah skrip untuk mengirimkan 0.001 TEA ke beberapa alamat Ethereum. Anda dapat memilih untuk menghasilkan alamat secara acak atau menggunakan daftar alamat yang Anda miliki sendiri.
+### TEA Testnet sepolia Script Bot
+### This project is a script to send 0.001 TEA to multiple Ethereum addresses. You can choose to generate addresses randomly or use your own list of addresses.
 
-**FITUR =**
-- # **Auto send 0.001 TEA ATAU BISA MEMILIH**
-- # **Notifikasi ke bot telegram**
-- # **Sudah menyiapkan 100+ address untuk dikirim (address.json)**
+**FEATURE =**
+- # **Auto send 0.001 TEA OR YOU CAN CHOOSE**
+- # **Notification to telegram bot**
+- # **Already prepared 100+ addresses to send (address.json)**
   ## **`DO YOU OWN RISK`**
   
 1. **Clone Repositori**
-Clone repositori ini ke komputer lokal Anda:
+Clone this repository to your local computer:
 ```bash
 git clone https://github.com/rzamlna/teaauto.git
 cd teaauto
@@ -20,13 +20,13 @@ npm install
 npm install ethers axios dotenv
 ```
 
-2. **Buat file `.env` di root direktori proyek dan masukkan konfigurasi berikut:**
+2. **Create files `.env` in the root of the project directory and enter the following configuration:**
 ```plaintext
 PRIVATE_KEY=your_private_key_here
 TELEGRAM_API_KEY=your_telegram_api_key_here
 TELEGRAM_CHAT_ID=your_telegram_chat_id_here
 ```
-3. **Jalankan skrip dengan perintah berikut:**
+3. **Run the script with the following command:**
 ```bash
 node index.js
 ```
@@ -37,5 +37,5 @@ DONATION
 
 `SOL = janechris.sol`
 
-#### **ꜱᴇʙᴇʟᴜᴍ ᴍᴇᴍᴀᴋᴀɪ ꜱᴄʀɪᴘᴛ ɪɴɪ, ᴘᴀʜᴀᴍɪ ᴀʀᴛɪ**
-#### **ᴅᴏ ʏᴏᴜ ᴏᴡɴ ʀɪꜱᴋ!!!**
+#### **BEFORE USING THIS SCRIPT, UNDERSTAND THE MEANING**
+#### **DO YOU OWN RISK!!!**
