@@ -20,16 +20,16 @@ npm install
 npm install ethers axios dotenv
 ```
 
-- Buat file .env di root folder proyek dan masukkan private key Anda:
-
+Buat file `.env` di root direktori proyek dan masukkan konfigurasi berikut:
+```plaintext
 PRIVATE_KEY=your_private_key_here
+TELEGRAM_API_KEY=your_telegram_api_key_here
+TELEGRAM_CHAT_ID=your_telegram_chat_id_here
 
 - Jalankan skrip dengan perintah berikut:
-
+```bash
 node index.js
-
-node sendTokenCreatedUser.js
-
+```
 
 DONATION
 
