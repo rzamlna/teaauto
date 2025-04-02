@@ -13,6 +13,11 @@ const asciiArt = `
 ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░         ░▒▓█▓▒░   ░▒▓█▓▒░        ░▒▓█▓▒░         ░▒▓█▓▒░   ░▒▓█▓▒░░▒▓█▓▒░ 
 ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░         ░▒▓█▓▒░   ░▒▓█▓▒░  ▒▓██▓▒░▒▓█▓▒░         ░▒▓█▓▒░   ░▒▓█▓▒░░▒▓█▓▒░ 
  ░▒▓██████▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓████████▓▒░  ░▒▓█▓▒░   ░▒▓█▓▒░  ▒▓██▓▒░▒▓████████▓▒░  ░▒▓█▓▒░   ░▒▓█▓▒░░▒▓█▓▒░ 
+Owner = janetf.eth
+Telegram = @ChrisEl2
+X = @janee0x
+
+                                                    - HAK CIPTA -
 `;
 
 console.log(asciiArt);  // Menampilkan ASCII Art
@@ -31,19 +36,12 @@ if (!PRIVATE_KEY || !TELEGRAM_API_KEY || !TELEGRAM_CHAT_ID) {
 const provider = new ethers.JsonRpcProvider(TEA_RPC_URL);
 const wallet = new ethers.Wallet(PRIVATE_KEY, provider);
 
-// ABI ERC-20 standar untuk interaksi transfer
-const ERC20_ABI = [
-    "function transfer(address to, uint256 amount) public returns (bool)",
-    "function symbol() public view returns (string)"
-];
-
 // Fungsi untuk mengirim pesan ke bot Telegram
 const sendTelegramNotification = async (message) => {
     try {
         const response = await axios.post(`https://api.telegram.org/bot${TELEGRAM_API_KEY}/sendMessage`, {
             chat_id: TELEGRAM_CHAT_ID,
-            text: message,
-            parse_mode: 'Markdown'  // Untuk memformat teks dengan link yang dapat diklik
+            text: message
         });
         console.log("Notifikasi dikirim ke Telegram:", response.data);
     } catch (error) {
@@ -56,29 +54,47 @@ const delay = (seconds) => {
     return new Promise(resolve => setTimeout(resolve, seconds * 1000)); // Mengubah detik ke milidetik
 };
 
-// Fungsi untuk mengirim token ERC-20 ke daftar alamat
-const sendToken = async (contractAddress, addresses, amount, delayTime, symbol) => {
-    const contract = new ethers.Contract(contractAddress, ERC20_ABI, wallet);
-
+// Fungsi untuk mengirim TEA ke daftar alamat
+const sendTea = async (addresses, delayTime, tokenContract, tokenAmount, tokenSymbol) => {
     for (let address of addresses) {
         try {
-            const tx = await contract.transfer(address, ethers.parseUnits(amount.toString(), 18));  // Mengirim token dengan jumlah yang ditentukan
-            console.log(`Mengirim ${amount} ${symbol} ke ${address}. Tx Hash: ${tx.hash}`);
-            await tx.wait();  // Tunggu transaksi selesai
+            let tx;
+            if (tokenSymbol === 'TEA') {
+                // Mengirim 0.001 TEA
+                tx = await wallet.sendTransaction({
+                    to: address,
+                    value: ethers.parseEther("0.001"), // Kirim 0.001 TEA ke setiap alamat
+                });
+                console.log(`Mengirim 0.001 TEA ke ${address}. Tx Hash: ${tx.hash}`);
+            } else {
+                // Kirim token sesuai kontrak, jumlah, dan simbol yang diberikan
+                const token = new ethers.Contract(tokenContract, [
+                    "function transfer(address to, uint256 amount) public returns (bool)"
+                ], wallet);
+                
+                const amount = ethers.parseUnits(tokenAmount, 18); // Asumsi token memiliki 18 desimal
+                tx = await token.transfer(address, amount);
+                console.log(`Mengirim ${tokenAmount} ${tokenSymbol} ke ${address}. Tx Hash: ${tx.hash}`);
+            }
+
+            await tx.wait();
+
+            // Menunggu sesuai delay yang ditentukan oleh pengguna
+            await delay(delayTime);
 
             // Membuat URL untuk Tx Hash
             const txUrl = `https://sepolia.tea.xyz/tx/${tx.hash}`;
 
             // Mengirim notifikasi ke Telegram dengan link Tx Hash
-            await sendTelegramNotification(`Transaksi sukses: Kirim ${amount} ${symbol} ke ${address} - Tx Hash: [${tx.hash}](${txUrl})`);
+            await sendTelegramNotification(`Transaksi sukses: Kirim ${tokenAmount} ${tokenSymbol} ke ${address} - Tx Hash: [${tx.hash}](${txUrl})`);
 
             // Menunggu sesuai delay yang ditentukan oleh pengguna setelah notifikasi
             await delay(delayTime);
 
         } catch (error) {
-            console.error(`Gagal mengirim token ke ${address}:`, error);
+            console.error(`Gagal mengirim ke ${address}:`, error);
             // Mengirim notifikasi jika gagal mengirim transaksi
-            await sendTelegramNotification(`Gagal mengirim token ke ${address}: ${error.message}`);
+            await sendTelegramNotification(`Gagal mengirim ke ${address}: ${error.message}`);
         }
     }
 };
@@ -98,55 +114,49 @@ const readAddressesFromFile = () => {
 };
 
 // Fungsi untuk meminta input dari pengguna
-const askDelayTime = () => {
+const askUserInput = () => {
     return new Promise((resolve, reject) => {
         const rl = readline.createInterface({
             input: process.stdin,
             output: process.stdout
         });
 
-        rl.question('Masukkan waktu delay (dalam detik, antara 1 dan 1000): ', (answer) => {
-            const delayTime = parseInt(answer);
-            if (delayTime >= 1 && delayTime <= 1000) {
-                resolve(delayTime);
-                rl.close();
+        rl.question('Pilih jenis transaksi (1 = Kirim 0.001 TEA, 2 = Kirim token lain): ', (choice) => {
+            if (choice === '1') {
+                // Kirim 0.001 TEA
+                resolve({ choice: 1 });
+            } else if (choice === '2') {
+                // Kirim token lain
+                rl.question('Masukkan kontrak token: ', (contract) => {
+                    rl.question('Masukkan jumlah token: ', (amount) => {
+                        rl.question('Masukkan simbol token: ', (symbol) => {
+                            resolve({ choice: 2, contract, amount, symbol });
+                            rl.close();
+                        });
+                    });
+                });
             } else {
-                reject('Input tidak valid. Masukkan angka antara 1 dan 1000.');
+                reject('Pilihan tidak valid.');
                 rl.close();
             }
         });
     });
 };
 
-// Fungsi untuk meminta input alamat kontrak, jumlah token, dan simbol berurutan
-const askContractAndAmountAndSymbol = () => {
-    return new Promise((resolve, reject) => {
-        const rl = readline.createInterface({
-            input: process.stdin,
-            output: process.stdout
-        });
-
-        rl.question('Masukkan alamat kontrak token (ERC-20): ', (contractAddress) => {
-            rl.question('Masukkan jumlah token yang ingin dikirim: ', (amount) => {
-                rl.question('Masukkan simbol token yang ingin dikirim (misalnya: KONTOL, MEMEK): ', (symbol) => {
-                    resolve({ contractAddress, amount, symbol });
-                    rl.close();
-                });
-            });
-        });
-    });
-};
-
 (async () => {
     try {
-        const delayTime = await askDelayTime();  // Meminta input delay dari pengguna
-        const { contractAddress, amount, symbol } = await askContractAndAmountAndSymbol();  // Meminta kontrak, jumlah, dan simbol berurutan
-        const addresses = await readAddressesFromFile();  // Membaca daftar alamat dari file
+        const userInput = await askUserInput();
+        const delayTime = await askDelayTime(); // Tanyakan waktu delay
+        const addresses = await readAddressesFromFile();
         console.log("Alamat yang diambil dari address.json:", addresses);
 
-        // Kirim token berdasarkan kontrak yang dimasukkan pengguna
-        await sendToken(contractAddress, addresses, amount, delayTime, symbol);
+        if (userInput.choice === 1) {
+            await sendTea(addresses, delayTime, null, "0.001", "TEA");
+        } else if (userInput.choice === 2) {
+            const { contract, amount, symbol } = userInput;
+            await sendTea(addresses, delayTime, contract, amount, symbol);
+        }
     } catch (error) {
-        console.error("Gagal memproses input:", error);
+        console.error("Gagal memproses:", error);
     }
 })();
