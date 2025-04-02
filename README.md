@@ -1,5 +1,5 @@
-TEA Airdrop Script
-Proyek ini adalah skrip untuk mengirimkan 0.01 TEA ke beberapa alamat Ethereum. Anda dapat memilih untuk menghasilkan alamat secara acak atau menggunakan daftar alamat yang Anda miliki sendiri.
+TEA Tesnet sepolia Script bot
+Proyek ini adalah skrip untuk mengirimkan 0.001 TEA ke beberapa alamat Ethereum. Anda dapat memilih untuk menghasilkan alamat secara acak atau menggunakan daftar alamat yang Anda miliki sendiri.
 
 Fitur
 Menghasilkan alamat Ethereum secara acak.
