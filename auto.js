@@ -36,7 +36,8 @@ const sendTelegramNotification = async (message) => {
     try {
         const response = await axios.post(`https://api.telegram.org/bot${TELEGRAM_API_KEY}/sendMessage`, {
             chat_id: TELEGRAM_CHAT_ID,
-            text: message
+            text: message,
+            parse_mode: 'Markdown'  // Untuk memformat teks dengan link yang dapat diklik
         });
         console.log("Notifikasi dikirim ke Telegram:", response.data);
     } catch (error) {
@@ -58,10 +59,7 @@ const sendTea = async (addresses, delayTime) => {
                 value: ethers.parseEther("0.001"), // Kirim 0.001 TEA ke setiap alamat
             });
             console.log(`Mengirim 0.001 TEA ke ${address}. Tx Hash: ${tx.hash}`);
-            await tx.wait();
-
-            // Menunggu sesuai delay yang ditentukan oleh pengguna
-            await delay(delayTime);
+            await tx.wait();  // Tunggu transaksi selesai
 
             // Membuat URL untuk Tx Hash
             const txUrl = `https://sepolia.tea.xyz/tx/${tx.hash}`;
@@ -117,10 +115,10 @@ const askDelayTime = () => {
 
 (async () => {
     try {
-        const delayTime = await askDelayTime();
-        const addresses = await readAddressesFromFile();
+        const delayTime = await askDelayTime();  // Meminta input delay dari pengguna
+        const addresses = await readAddressesFromFile();  // Membaca daftar alamat dari file
         console.log("Alamat yang diambil dari address.json:", addresses);
-        await sendTea(addresses, delayTime);
+        await sendTea(addresses, delayTime);  // Mengirimkan TEA ke alamat yang sudah dibaca
     } catch (error) {
         console.error("Gagal memproses alamat:", error);
     }
