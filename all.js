@@ -13,6 +13,10 @@ const asciiArt = `
 ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░         ░▒▓█▓▒░   ░▒▓█▓▒░        ░▒▓█▓▒░         ░▒▓█▓▒░   ░▒▓█▓▒░░▒▓█▓▒░ 
 ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░         ░▒▓█▓▒░   ░▒▓█▓▒░  ▒▓██▓▒░▒▓█▓▒░         ░▒▓█▓▒░   ░▒▓█▓▒░░▒▓█▓▒░ 
  ░▒▓██████▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓████████▓▒░  ░▒▓█▓▒░   ░▒▓█▓▒░  ▒▓██▓▒░▒▓████████▓▒░  ░▒▓█▓▒░   ░▒▓█▓▒░░▒▓█▓▒░ 
+ CONTACT                                     SUPPORT
+ X = @janee0x                                ETH = janetf.eth
+ Tele = @ChrisEl2                            SOL = janechris.sol
+
 `;
 
 console.log(asciiArt);  // Menampilkan ASCII Art
@@ -39,7 +43,7 @@ const sendTelegramNotification = async (message) => {
             chat_id: TELEGRAM_CHAT_ID,
             text: message
         }, {
-            timeout: 3000  // Timeout 3 detik
+            timeout: 1000  // Timeout 1 detik
         });
     } catch (error) {
         // Gagal mengirim notifikasi, tetapi tidak ada log di konsol
