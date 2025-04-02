@@ -33,6 +33,7 @@ node sendTokenCreatedUser.js
 
 
 DONATION
+
 `ETH = janetf.eth`
 
 `SOL = janechris.sol`
