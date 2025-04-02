@@ -13,10 +13,12 @@ Clone repositori ini ke komputer lokal Anda:
 git clone https://github.com/rzamlna/teaauto.git
 cd teaauto
 ```
+```bash
 npm install
-
+```
+```bash
 npm install ethers axios dotenv
-
+```
 
 - Buat file .env di root folder proyek dan masukkan private key Anda:
 
